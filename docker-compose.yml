@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  nodeapp:
+    image: phani997/nodeapp:v1
+    restart: always
+    ports:
+      - "1338:1338"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis
+
+  service:
+    image: phani997/service:v1
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis    
+
+volumes:
+  db-data:
+  redis-data:
