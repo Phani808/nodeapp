@@ -2,13 +2,7 @@ const http = require("http");
 const exec = require("child_process").exec;
 const path = require("path");
 const async = require("async");
-const https = require("https");
-const fs = require("fs");
 const { append } = require("express/lib/response");
-const sslServer = https.createServer({
-  key: fs.readFileSync(path.join(--dirname, 'cert', 'key.pem')),
-  cert: fs.readFileSync(path.join(_-dirname, 'cert', 'cert.pem'))
-}, app)
 
 const projectPath = process.argv[2];
 const absolutePath = path.join(projectPath);
